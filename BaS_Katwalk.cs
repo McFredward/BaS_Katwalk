@@ -86,7 +86,7 @@ namespace BaS_Katwalk
         [ModOption(name: "Speed max. Range", tooltip: "Modifies what maximal ingame speed value corresponds to the maximal KatWalk speed (5 m/s)", valueSourceName: nameof(speedMaxRangeOption), category = "Speed options", defaultValueIndex = 2)]
         private static float speedMaxRange;
 
-        [ModOption(name: "Speed curve exponent", tooltip: "Modifies the speed curve which determines how fast the maximal speed is reached", valueSourceName: nameof(speedExponentOption), category = "Speed options", defaultValueIndex = 1)]
+        [ModOption(name: "Speed curve exponent", tooltip: "Modifies the speed curve which determines how fast the maximal speed is reached", valueSourceName: nameof(speedExponentOption), category = "Speed options", defaultValueIndex = 5)]
         private static float speedExponent;
 
         [ModOption(name: "joystick disabled", tooltip: "Disabling the Joystick-Movement", category = "Others")]
