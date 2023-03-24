@@ -12,7 +12,7 @@ A KatWalk SDK integration mod into Blade&Sorcery **for U12**
 
 * Unzip the files within the [release](https://github.com/McFredward/BaS_Katwalk/releases/tag/init) into `Blade & Sorcery\BladeAndSorcery_Data\StreamingAssets\Mods`
 * Start the KatWalk Gateway
-* **Turn off the Walk and Run Source within the gateway** for Blade&Sorcery, since the directly communicates with the game. There is no need to simulate the Joystick anymore and lead to unintended behavior.
+* **Turn off the Walk and Run Source within the gateway** for Blade&Sorcery, since the Gateway directly communicates with the game. There is no need to simulate the Joystick anymore and it could lead to unintended behavior.
 * Start the game
 
 ## Modification values
