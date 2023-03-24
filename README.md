@@ -1,5 +1,5 @@
 # BaS_Katwalk
-A KatWalk SDK integration mod into Blade&Sorcery
+A KatWalk SDK integration mod into Blade&Sorcery **for U12**
 
 ## Features:
 
@@ -21,7 +21,7 @@ soon
 
 ## Known issues
 
-soon
+* Backwards walking is not working like with the Joystick emulation (seems like the SDK dont support it right now)
 
 ## Credits & Libs
 
