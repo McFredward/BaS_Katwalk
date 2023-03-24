@@ -35,18 +35,33 @@ namespace BaS_Katwalk
         };
 
         public static ModOptionFloat[] speedMaxRangeOption = {
+            new ModOptionFloat("0.5", 0.5f),
+            new ModOptionFloat("0.75", 0.75f),
             new ModOptionFloat("1", 1.0f),
+            new ModOptionFloat("1.25", 1.25f),
             new ModOptionFloat("1.5", 1.5f),
+            new ModOptionFloat("1.75", 1.75f),
             new ModOptionFloat("2", 2.0f),
+            new ModOptionFloat("2.25", 2.25f),
             new ModOptionFloat("2.5", 2.5f),
+            new ModOptionFloat("2.75", 2.75f),
             new ModOptionFloat("3", 3.0f),
+            new ModOptionFloat("3.25", 3.25f),
             new ModOptionFloat("3.5", 3.5f),
+            new ModOptionFloat("3.75", 3.75f),
             new ModOptionFloat("4", 4.0f),
+            new ModOptionFloat("4.25", 4.25f),
             new ModOptionFloat("4.5", 4.5f),
+            new ModOptionFloat("4.75", 4.75f),
             new ModOptionFloat("5", 5.0f)
         };
 
         public static ModOptionFloat[] speedExponentOption = {
+            new ModOptionFloat("0.5 (square root)", 0.5f),
+            new ModOptionFloat("0.6", 0.6f),
+            new ModOptionFloat("0.7", 0.7f),
+            new ModOptionFloat("0.8", 0.8f),
+            new ModOptionFloat("0.9", 0.9f),
             new ModOptionFloat("1 (linear)", 1.0f),
             new ModOptionFloat("1.1", 1.1f),
             new ModOptionFloat("1.2", 1.2f),
@@ -68,7 +83,7 @@ namespace BaS_Katwalk
         [ModOption(name: "Speed Multiplicator", tooltip: "Modifies how the speed of the KatWalk is translated to the in-game speed", valueSourceName: nameof(speedMulOption), category = "Speed options",defaultValueIndex = 3)]
         private static float speedMul;
 
-        [ModOption(name: "Speed max. Range", tooltip: "Modifies what maximal ingame speed value corresponds to the maximal KatWalk speed (5 m/s)", valueSourceName: nameof(speedMaxRangeOption), category = "Speed options", defaultValueIndex = 4)]
+        [ModOption(name: "Speed max. Range", tooltip: "Modifies what maximal ingame speed value corresponds to the maximal KatWalk speed (5 m/s)", valueSourceName: nameof(speedMaxRangeOption), category = "Speed options", defaultValueIndex = 2)]
         private static float speedMaxRange;
 
         [ModOption(name: "Speed curve exponent", tooltip: "Modifies the speed curve which determines how fast the maximal speed is reached", valueSourceName: nameof(speedExponentOption), category = "Speed options", defaultValueIndex = 1)]
