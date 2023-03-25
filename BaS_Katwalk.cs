@@ -58,20 +58,35 @@ namespace BaS_Katwalk
 
         public static ModOptionFloat[] speedExponentOption = {
             new ModOptionFloat("0.5 (square root)", 0.5f),
+            new ModOptionFloat("0.55", 0.55f),
             new ModOptionFloat("0.6", 0.6f),
+            new ModOptionFloat("0.65", 0.65f),
             new ModOptionFloat("0.7", 0.7f),
+            new ModOptionFloat("0.75", 0.75f),
             new ModOptionFloat("0.8", 0.8f),
+            new ModOptionFloat("0.85", 0.85f),
             new ModOptionFloat("0.9", 0.9f),
+            new ModOptionFloat("0.95", 0.95f),
             new ModOptionFloat("1 (linear)", 1.0f),
+            new ModOptionFloat("1.05", 1.05f),
             new ModOptionFloat("1.1", 1.1f),
+            new ModOptionFloat("1.15", 1.15f),
             new ModOptionFloat("1.2", 1.2f),
+            new ModOptionFloat("1.25", 1.25f),
             new ModOptionFloat("1.3", 1.3f),
+            new ModOptionFloat("1.35", 1.35f),
             new ModOptionFloat("1.4", 1.4f),
+            new ModOptionFloat("1.45", 1.45f),
             new ModOptionFloat("1.5", 1.5f),
+            new ModOptionFloat("1.55", 1.55f),
             new ModOptionFloat("1.6", 1.6f),
+            new ModOptionFloat("1.65", 1.65f),
             new ModOptionFloat("1.7", 1.7f),
+            new ModOptionFloat("1.75", 1.75f),
             new ModOptionFloat("1.8", 1.8f),
+            new ModOptionFloat("1.85", 1.85f),
             new ModOptionFloat("1.9", 1.9f),
+            new ModOptionFloat("1.95", 1.95f),
             new ModOptionFloat("2 (quadratic)", 2.0f)
         };
 
@@ -87,7 +102,7 @@ namespace BaS_Katwalk
         [ModOption(name: "Speed max. Range", tooltip: "Modifies what maximal ingame speed value corresponds to the maximal KatWalk speed (5 m/s)", valueSourceName: nameof(speedMaxRangeOption), category = "Speed options", defaultValueIndex = 8)]
         private static float speedMaxRange;
 
-        [ModOption(name: "Speed curve exponent", tooltip: "Modifies the speed curve which determines how fast the maximal speed is reached", valueSourceName: nameof(speedExponentOption), category = "Speed options", defaultValueIndex = 3)]
+        [ModOption(name: "Speed curve exponent", tooltip: "Modifies the speed curve which determines how fast the maximal speed is reached", valueSourceName: nameof(speedExponentOption), category = "Speed options", defaultValueIndex = 5)]
         private static float speedExponent;
 
         [ModOption(name: "joystick disabled", tooltip: "Disabling the Joystick-Movement", category = "Others")]
