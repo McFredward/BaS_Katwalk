@@ -183,6 +183,9 @@ namespace BaS_Katwalk
             public static UnityEngine.Vector3 Postfix(UnityEngine.Vector3 __result)
             {
                 var ws = KATNativeSDK.GetWalkStatus();
+                //Debug.Log("speedMul: "+  speedMul.ToString());
+                //Debug.Log("speedExponent" + speedExponent.ToString());
+                //Debug.Log("speedMaxRange"+speedMaxRange.ToString());
 
 
                 //(0,BodyYaw,0)
@@ -191,9 +194,11 @@ namespace BaS_Katwalk
                 //(0,0,Speed)
                 UnityEngine.Vector3 speed = ws.moveSpeed * speedMul;
                 Vector3 velocity = direction * speed;
+                //Debug.Log("velocity: " + velocity.ToString());
                 float ratio1 = CalculateRatioModified(Mathf.Abs(velocity.x), 0.0f, 5f, 0.0f, speedMaxRange);
                 float ratio2 = CalculateRatioModified(Mathf.Abs(velocity.z), 0.0f, 5f, 0.0f, speedMaxRange);
                 UnityEngine.Vector3 kat_result = new UnityEngine.Vector3((double)velocity.x > 0.0 ? ratio1 : -ratio1, 0.0f, (double)velocity.z > 0.0 ? ratio2 : -ratio2);
+                //Direction x values are increased when loading a new level, why?!
 
                 if (joystick_disabled)
                 {
@@ -201,7 +206,14 @@ namespace BaS_Katwalk
                 }
                 else
                 {
-                    return kat_result + __result; //return sum, so that a mixture of Joystick+KatWalk is possible
+                    if(kat_result == Vector3.zero)
+                    {
+                        return __result;
+                    }
+                    else
+                    {
+                        return kat_result;
+                    }
                 }
             }
         }
@@ -224,5 +236,37 @@ namespace BaS_Katwalk
             return (float)(Math.Pow(normalized_input, (Double)speedExponent) * ((double)outputMax - (double)outputMin) + outputMin);
         }
 
+
+        /*
+
+        [HarmonyPatch(typeof(Locomotion), "MoveWeighted", new Type[] { typeof(Vector3),typeof(Transform),typeof(float),typeof(float),typeof(float) })]
+        public static class BaS_Locomotion
+        {
+            [HarmonyPrefix]
+            public static void Prefix(Locomotion __instance, float ___forwardSpeedMultiplier, float ___backwardSpeedMultiplier, float ___strafeSpeedMultiplier, float runSpeedRatio, float acceleration, Vector3 direction)
+            {
+                if(__instance.player != null)
+                {
+                    //foreward, backward, strafe speed constant on 0.16
+                    Debug.Log("-------------------------------");
+                    //Debug.Log("forwardSpeed: " + __instance.forwardSpeed.ToString());
+                    //Debug.Log("forwardSpeedMultiplier: " + ___forwardSpeedMultiplier.ToString());
+                    //Debug.Log("backwardSpeed: " + __instance.backwardSpeed.ToString());
+                    //Debug.Log("backwardSpeedMultiplier: " + ___backwardSpeedMultiplier.ToString());
+                    //Debug.Log("strafeSpeed: " + __instance.strafeSpeed.ToString());
+                    //Debug.Log("strafeSpeedMultiplier: " + ___strafeSpeedMultiplier.ToString());
+                    //Debug.Log("customGravity: " + __instance.customGravity);
+                    //Debug.Log("runSpeedRatio: " + runSpeedRatio.ToString());
+                    //Debug.Log("acceleration: " + acceleration.ToString());
+                    Debug.Log("direction: " + direction.ToString());
+                    //Debug.Log("transform.lossyScale: " + __instance.transform.lossyScale.ToString());
+                    //Debug.Log("transform.lossyScale.y: " + __instance.transform.lossyScale.y.ToString());
+                    //Debug.Log("Mathf.Clamp01(this.transform.lossyScale.y): " + Mathf.Clamp01(__instance.transform.lossyScale.y).ToString());
+                    Debug.Log("-------------------------------");
+                }
+            }
+        }
+
+        */
     }
 }
