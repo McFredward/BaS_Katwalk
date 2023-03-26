@@ -90,6 +90,11 @@ namespace BaS_Katwalk
             new ModOptionFloat("2 (quadratic)", 2.0f)
         };
 
+        public static ModOptionBool[] turningDisabledOption = {
+            new ModOptionBool("Disabled", false),
+            new ModOptionBool("Enabled", true)
+        };
+
         #endregion
 
 
@@ -107,6 +112,9 @@ namespace BaS_Katwalk
 
         [ModOption(name: "joystick disabled", tooltip: "Disabling the Joystick-Movement", category = "Others")]
         private static bool joystick_disabled = false;
+
+        [ModOption(name: "Truning disabled", tooltip: "Disabling Joystick-turn. Recommended, since you have to recenter every time after using the turn.", valueSourceName: nameof(turningDisabledOption), category ="Others", defaultValueIndex = 1)]
+        private static bool turning_disabled; //default true
 
 
 
@@ -162,6 +170,15 @@ namespace BaS_Katwalk
             [HarmonyPostfix]
             public static void Postfix(PlayerControl __instance)
             {
+                if (turning_disabled && Player.local.locomotion.turnSpeed != 0.0f)
+                {
+                    Player.local.locomotion.turnSpeed = 0.0f;
+                }
+                else if(!turning_disabled && Player.local.locomotion.turnSpeed != 1.0f)
+                {
+                    Player.local.locomotion.turnSpeed = 1.0f;
+                }
+
                 var ws = KATNativeSDK.GetWalkStatus();
                 var lastCalibrationTime = KATNativeSDK.GetLastCalibratedTimeEscaped();
 
@@ -176,9 +193,10 @@ namespace BaS_Katwalk
 
                     var pos = Player.local.transform.position;
                     var eyePos = Player.local.head.transform.position;
-                    pos.x = eyePos.x;
-                    pos.z = eyePos.z;
-                    Player.local.transform.position = pos;
+                    eyePos.x = pos.x;
+                    eyePos.z = pos.z;
+                    Player.local.head.transform.position = eyePos;
+                    
                 }
 
                 float walking_speed = ws.moveSpeed.z;
