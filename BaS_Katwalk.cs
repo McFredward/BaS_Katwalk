@@ -13,6 +13,7 @@ using System.Reflection;
 using System.IO;
 using UnityEngine.Events;
 using System.Data;
+using System.Timers;
 
 namespace BaS_Katwalk
 {
@@ -120,6 +121,15 @@ namespace BaS_Katwalk
 
         private static float yawCorrection = 0.0f;
         private Harmony harmony;
+        private static bool invoke_auto_calibrate = false;
+        private static System.Timers.Timer invoke_auto_calibrate_time = new System.Timers.Timer();
+        private static bool allow_recalibration = true;
+
+        private void AutoCalibrateTimeElapsed(object sender, ElapsedEventArgs e)
+        {
+            Debug.Log("BaS_Katwalk: Invoke auto calibration");
+            invoke_auto_calibrate = true;
+        }
 
         #endregion
 
@@ -134,6 +144,8 @@ namespace BaS_Katwalk
         {
             harmony = new Harmony("bas.katwalk");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+            invoke_auto_calibrate_time.Interval = 2000; //2 seconds
+            invoke_auto_calibrate_time.Elapsed += AutoCalibrateTimeElapsed;
             Debug.Log("BaS_Katwalk: All methods patched");
         }
 
@@ -162,6 +174,17 @@ namespace BaS_Katwalk
             }
         }
 
+        //Method returns a ratio dependend on how the arms a moved to simulate a "run"
+        [HarmonyPatch(typeof(LevelManager), "LoadLevelCoroutine", new Type[] { typeof(LevelData), typeof(LevelData.Mode), typeof(Dictionary<string,string>) })]
+        public static class BaS_LoadLevel
+        {
+            [HarmonyPrefix]
+            public static void Postfix()
+            {
+                invoke_auto_calibrate_time.Start();
+            }
+        }
+
         //--- Invoke move if KatWalk is used & recalibrate ---
 
         [HarmonyPatch(typeof(PlayerControl), "ManagedUpdate", new Type[] { })]
@@ -182,21 +205,37 @@ namespace BaS_Katwalk
                 var ws = KATNativeSDK.GetWalkStatus();
                 var lastCalibrationTime = KATNativeSDK.GetLastCalibratedTimeEscaped();
 
-                if (ws.deviceDatas[0].btnPressed || lastCalibrationTime < 0.08)
+
+                if(lastCalibrationTime > 3.0f) //Prohibit multi recalibrations behind each other: Only one per 0.5s
+                {
+                    allow_recalibration = true;
+                }
+
+
+                //Debug.Log("btnPressed: " + ws.deviceDatas[0].btnPressed.ToString() + " last CalibrationTime: " + lastCalibrationTime.ToString());
+                if ((ws.deviceDatas[0].btnPressed && allow_recalibration) || invoke_auto_calibrate)
                 {
                     Debug.Log("BaS_Katwalk: Recalibrate");
-                    //Do recalibration
-                    var hmdYaw = Player.local.head.transform.rotation.eulerAngles.y;
-                    var bodyYaw = ws.bodyRotationRaw.eulerAngles.y;
+                    invoke_auto_calibrate = false;
+                    allow_recalibration = false;
+                    invoke_auto_calibrate_time.Stop();
+                    try
+                    {
+                        //Do recalibration
+                        var hmdYaw = Player.local.head.transform.rotation.eulerAngles.y;
+                        var bodyYaw = ws.bodyRotationRaw.eulerAngles.y;
 
-                    yawCorrection = bodyYaw - hmdYaw;
+                        yawCorrection = bodyYaw - hmdYaw;
 
-                    var pos = Player.local.transform.position;
-                    var eyePos = Player.local.head.transform.position;
-                    eyePos.x = pos.x;
-                    eyePos.z = pos.z;
-                    Player.local.head.transform.position = eyePos;
-                    
+                        var pos = Player.local.transform.position;
+                        var eyePos = Player.local.head.transform.position;
+                        eyePos.x = pos.x;
+                        eyePos.z = pos.z;
+                        Player.local.head.transform.position = eyePos;
+                    }
+                    catch (Exception e) {
+                        Debug.Log("Unable to recalibrate:\n"+e.ToString()); //Can happen while loading the menu
+                    }
                 }
 
                 float walking_speed = ws.moveSpeed.z;
